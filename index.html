@@ -14,13 +14,11 @@
   --font:"Inter","Helvetica Neue",Helvetica,Arial,sans-serif;
   --bar-h:112px; --zoom-ms:520ms;
 
-  /* colors from your icons */
   --c-green:#7aa46d;
   --c-purple:#8161a7;
   --c-blue:#7dbec7;
   --c-coral:#c77c74;
 
-  /* keep page titles clear of the fixed bar */
   --title-offset: calc(var(--bar-h) + 24px);
 }
 
@@ -34,7 +32,7 @@ img{user-drag:none; -webkit-user-drag:none}
 .bar{
   position:fixed; inset:0 0 auto 0; height:var(--bar-h);
   display:flex; align-items:flex-end; justify-content:center; gap:14px;
-  background:#fff; border-bottom:1px solid #e9e9e9; z-index:200;   /* raised above page titles */
+  background:#fff; border-bottom:1px solid #e9e9e9; z-index:200;
   padding:10px calc(var(--pad)*1.25) 8px;
 }
 .title{display:flex; gap:8px; align-items:flex-end}
@@ -72,7 +70,7 @@ img{user-drag:none; -webkit-user-drag:none}
 .tile:nth-child(8){--r:2deg;    animation-delay:.44s}
 .tile:nth-child(9){--r:-1.1deg; animation-delay:.50s}
 
-/* Home icon button — icon only */
+/* Home icon button */
 .home-chip{
   position:absolute; right:16px; top:8px; display:grid; place-items:center;
 }
@@ -112,22 +110,22 @@ main{padding-top:calc(var(--bar-h) + 2px)}
 .scene.hotspots-hidden .hotspot{opacity:0; pointer-events:none; transition:opacity .4s ease}
 .scene .hotspot{opacity:1; transition:opacity .4s ease}
 
-/* zoom overlay for hotspot nav */
+/* zoom overlay */
 .zoom-overlay{position:fixed; inset:0; pointer-events:none; z-index:40; display:none}
 .zoom-overlay.active{display:block}
 .zoom-piece{position:absolute; will-change:transform; background:#fff}
 
-/* ===== Collage pages (floating ransom title + huge canvas) ===== */
+/* ===== Collage pages ===== */
 .desk-wrap{max-width:1600px; margin:0 auto; padding:0 calc(var(--pad)*1.2) 60px}
 .desk{
   position:relative; width:100%; min-height:130vh; overflow:visible;
   background:
     radial-gradient(1200px 400px at 30% -10%, #fafafa 0%, transparent 60%),
     radial-gradient(1200px 400px at 70% 110%, #fafafa 0%, transparent 60%);
-  padding-top: calc(var(--title-offset) + 24px); /* room for title + some breathing */
+  padding-top: calc(var(--title-offset) + 24px);
 }
 
-/* floating single-color ransom page title (always beneath the bar) */
+/* floating title */
 .scrap-title{
   position:absolute; left:50%; top:var(--title-offset); transform:translateX(-50%);
   display:flex; gap:6px; z-index:40; pointer-events:none;
@@ -138,11 +136,20 @@ main{padding-top:calc(var(--bar-h) + 2px)}
 .color-green  .scrap-title .tile{--paper:color-mix(in oklab, var(--c-green) 24%, white)}
 .color-purple .scrap-title .tile{--paper:color-mix(in oklab, var(--c-purple) 24%, white)}
 
-/* stickers: pure PNG/VIDEO, no frames */
+/* stickers */
 .sticker{position:absolute; border:none; background:transparent; cursor:grab; user-select:none; touch-action:none; transition:transform .08s ease}
 .sticker:hover{transform:translate3d(var(--tx,0),var(--ty,0),0) scale(1.02)}
 .sticker:active{cursor:grabbing}
 .sticker img, .sticker video{display:block; width:100%; height:auto; pointer-events:none; background:transparent}
+
+/* locked puzzle pieces */
+.sticker.locked{cursor:default; box-shadow:0 0 0 2px rgba(0,0,0,.15);}
+.puzzle-message{
+  position:absolute; left:50%; bottom:24px; transform:translateX(-50%);
+  padding:8px 16px; border-radius:999px;
+  background:#000; color:#fff; font:600 12px/1 var(--font);
+  letter-spacing:.08em; text-transform:uppercase;
+}
 
 /* Lightbox */
 .lb{position:fixed; inset:0; display:none; align-items:center; justify-content:center; background:rgba(0,0,0,.85); z-index:80}
@@ -154,6 +161,25 @@ main{padding-top:calc(var(--bar-h) + 2px)}
 /* helper */
 .helper{position:fixed; right:12px; bottom:12px; z-index:60; background:#fff; border:1px solid #e5e5e5; border-radius:10px; padding:8px 10px; font:12px/1.2 var(--font); display:none; box-shadow:0 6px 18px rgba(0,0,0,.12)}
 .helper.active{display:block}
+
+/* gallery wall frame on EXHIBIT page */
+.gallery-wall{
+  position:absolute;
+  left:4%; top:32%; width:30%; height:40%;
+  border-radius:16px;
+  background:linear-gradient(180deg,#f5f5f5,#ececec);
+  box-shadow:0 10px 28px rgba(0,0,0,.12);
+  overflow:hidden;
+}
+.gallery-wall::before{
+  content:"";
+  position:absolute; inset:12px;
+  border-radius:12px;
+  border:1px dashed rgba(0,0,0,.1);
+}
+.gallery-wall .sticker{
+  cursor:grab;
+}
 </style>
 </head>
 <body>
@@ -172,7 +198,6 @@ main{padding-top:calc(var(--bar-h) + 2px)}
     <span class="tile"><span>K</span></span>
   </a>
 
-  <!-- icon-only home button -->
   <a class="home-chip" href="#home" title="Home">
     <img src="green icon.PNG" alt="Home">
   </a>
@@ -194,7 +219,7 @@ main{padding-top:calc(var(--bar-h) + 2px)}
         <div class="piece p21" style="--tx:34%;  --ty:-14%; --rot:11deg; --delay:820ms"></div>
       </div>
 
-      <!-- FINAL HOTSPOTS  -->
+      <!-- HOTSPOTS -->
       <button class="hotspot" style="left:60.15%; top:15.11%;" data-target="#pool"><span class="tag"><span class="dot"></span>Pool</span></button>
       <button class="hotspot" style="left:44.48%; top:24.36%;" data-target="#exhibit"><span class="tag"><span class="dot"></span>Exhibition Space</span></button>
       <button class="hotspot" style="left:20.77%; top:33.50%;" data-target="#drawings"><span class="tag"><span class="dot"></span>Drawings</span></button>
@@ -207,7 +232,7 @@ main{padding-top:calc(var(--bar-h) + 2px)}
     </div>
   </section>
 
-  <!-- ===== PAGES (floating title + huge “desk”) ===== -->
+  <!-- ===== PAGES ===== -->
   <section id="pool" class="page color-blue">
     <div class="desk-wrap"><div class="desk" data-page="pool">
       <div class="scrap-title" data-word="POOL"></div>
@@ -220,16 +245,33 @@ main{padding-top:calc(var(--bar-h) + 2px)}
   <section id="exhibit" class="page color-purple">
     <div class="desk-wrap"><div class="desk" data-page="exhibit">
       <div class="scrap-title" data-word="EXHIBITION SPACE"></div>
-      <div class="sticker" style="left:52%; top:22%; width:50%"><img src="Plan Gallery.jpg" alt="" draggable="false"></div>
-      <div class="sticker" style="left:1%; top:18%; width:17%"><img src="gallery icon.jpg" alt="" draggable="false"></div>
-      <div class="sticker" style="left:10%; top:38%; width:12%"><img src="art1.jpg" alt="" draggable="false"></div>
-      <div class="sticker" style="left:20%; top:48%; width:12%"><img src="art3.jpg" alt="" draggable="false"></div>
-      <div class="sticker" style="left:30%; top:58%; width:7%"><img src="art 2.2.jpg" alt="" draggable="false"></div>
-      <div class="sticker" style="left:25%; top:62%; width:10%"><img src="art 2.1.jpg" alt="" draggable="false"></div>
-      <div class="sticker" style="left:38%; top:66%; width:10%"><img src="art 2.3.jpg" alt="" draggable="false"></div>
-      <div class="sticker" style="left:42%; top:60%; width:7%"><img src="art 2.4.jpg" alt="" draggable="false"></div>
-      <div class="sticker" style="left:20%; top:15%; width:17%"><img src="green icon.PNG" alt="" draggable="false"></div>
-     
+
+      <!-- gallery wall frame on the left -->
+      <div class="gallery-wall">
+        <div class="sticker" style="left:10%; top:10%; width:32%" data-wall="gallery">
+          <img src="art1.jpg" alt="" draggable="false">
+        </div>
+        <div class="sticker" style="left:55%; top:12%; width:32%" data-wall="gallery">
+          <img src="art3.jpg" alt="" draggable="false">
+        </div>
+        <div class="sticker" style="left:8%; top:52%; width:24%" data-wall="gallery">
+          <img src="art 2.1.jpg" alt="" draggable="false">
+        </div>
+        <div class="sticker" style="left:38%; top:48%; width:24%" data-wall="gallery">
+          <img src="art 2.2.jpg" alt="" draggable="false">
+        </div>
+        <div class="sticker" style="left:18%; top:70%; width:24%" data-wall="gallery">
+          <img src="art 2.3.jpg" alt="" draggable="false">
+        </div>
+        <div class="sticker" style="left:54%; top:68%; width:24%" data-wall="gallery">
+          <img src="art 2.4.jpg" alt="" draggable="false">
+        </div>
+      </div>
+
+      <!-- rest of gallery content to the right -->
+      <div class="sticker" style="left:55%; top:22%; width:40%"><img src="Plan Gallery.jpg" alt="" draggable="false"></div>
+      <div class="sticker" style="left:6%; top:18%; width:12%"><img src="gallery icon.jpg" alt="" draggable="false"></div>
+      <div class="sticker" style="left:26%; top:19%; width:10%"><img src="green icon.PNG" alt="" draggable="false"></div>
     </div></div>
   </section>
 
@@ -269,8 +311,14 @@ main{padding-top:calc(var(--bar-h) + 2px)}
   <section id="context" class="page color-green">
     <div class="desk-wrap"><div class="desk" data-page="context">
       <div class="scrap-title" data-word="CONTEXT"></div>
-      <div class="sticker" style="left:12%; top:17%; width:43%"><img src="1 interlock model.PNG" alt="" draggable="false"></div>
-      <div class="sticker" style="left:50%; top:17%; width:43%"><img src="2 interlock model.PNG" alt="" draggable="false"></div>
+      <!-- INTERLOCK MODEL PUZZLE (2 pieces) -->
+      <div class="sticker" style="left:12%; top:17%; width:43%" data-puzzle-group="context-model">
+        <img src="1 interlock model.PNG" alt="" draggable="false">
+      </div>
+      <div class="sticker" style="left:50%; top:17%; width:43%" data-puzzle-group="context-model">
+        <img src="2 interlock model.PNG" alt="" draggable="false">
+      </div>
+
       <div class="sticker" style="left:15%; top:40%; width:38%"><img src="section study 1.JPG" alt="" draggable="false"></div>
       <div class="sticker" style="left:57%; top:50%; width:34%"><img src="section study 2.JPG" alt="" draggable="false"></div>
     </div></div>
@@ -289,7 +337,6 @@ main{padding-top:calc(var(--bar-h) + 2px)}
       <div class="sticker" style="left:-3%; top:15%; width:20%"><img src="blue icon.PNG" alt="" draggable="false"></div>
       <div class="sticker" style="left:-3%; top:35%; width:20%"><img src="purple icon.PNG" alt="" draggable="false"></div>
       <div class="sticker" style="left:-3%; top:50%; width:20%"><img src="coral icon.PNG" alt="" draggable="false"></div>
-      
     </div></div>
   </section>
 
@@ -299,13 +346,20 @@ main{padding-top:calc(var(--bar-h) + 2px)}
       <div class="sticker" style="left:10%; top:25%; width:40%"><img src="quote 1.jpg" alt="" draggable="false"></div>
       <div class="sticker" style="left:60%; top:25%; width:40%"><img src="quote 2.jpg" alt="" draggable="false"></div>
       <div class="sticker" style="left:80%; top:60%; width:20%"><img src="mindbodysoul.jpg" alt="" draggable="false"></div>
-      <div class="sticker" style="left:11%; top:45%; width:10%"><img src="collagepuzzle1.PNG" alt="" draggable="false"></div>
-      <div class="sticker" style="left:22%; top:45%; width:8%"><img src="collagepuzzle2.PNG" alt="" draggable="false"></div>
-      <div class="sticker" style="left:33%; top:45%; width:8%"><img src="collagepuzzle3.PNG" alt="" draggable="false"></div>
-      <div class="sticker" style="left:44%; top:45%; width:10%"><img src="collagepuzzle4.PNG" alt="" draggable="false"></div>
 
-
-
+      <!-- 4-piece collage puzzle -->
+      <div class="sticker" style="left:11%; top:45%; width:10%" data-puzzle-group="intent-collage">
+        <img src="collagepuzzle1.PNG" alt="" draggable="false">
+      </div>
+      <div class="sticker" style="left:22%; top:45%; width:8%" data-puzzle-group="intent-collage">
+        <img src="collagepuzzle2.PNG" alt="" draggable="false">
+      </div>
+      <div class="sticker" style="left:33%; top:45%; width:8%" data-puzzle-group="intent-collage">
+        <img src="collagepuzzle3.PNG" alt="" draggable="false">
+      </div>
+      <div class="sticker" style="left:44%; top:45%; width:10%" data-puzzle-group="intent-collage">
+        <img src="collagepuzzle4.PNG" alt="" draggable="false">
+      </div>
     </div></div>
   </section>
 
@@ -314,8 +368,6 @@ main{padding-top:calc(var(--bar-h) + 2px)}
       <div class="scrap-title" data-word="PROCESS"></div>
       <div class="sticker" style="left:60%; top:40%; width:25%"><img src="process1.jpg" alt="" draggable="false"></div>
       <div class="sticker" style="left:80%; top:26%; width:18%"><img src="process2.jpg" alt="" draggable="false"></div>
-
-
       <div class="sticker" style="left:10%; top:22%; width:20%">
         <video src="process video.mp4" playsinline muted controls preload="metadata"></video>
       </div>
@@ -334,12 +386,15 @@ main{padding-top:calc(var(--bar-h) + 2px)}
 function syncPages(){
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   const t = document.querySelector(location.hash || '#home');
-  if(t && t.classList.contains('page')){ t.classList.add('active'); t.scrollIntoView({behavior:'auto', block:'start'}); }
+  if(t && t.classList.contains('page')){
+    t.classList.add('active');
+    t.scrollIntoView({behavior:'auto', block:'start'});
+  }
 }
 addEventListener('hashchange', syncPages);
 addEventListener('load', syncPages);
 
-/* Build ransom titles (spaces become gaps, not tiles) */
+/* Build ransom titles */
 function buildScrap(el){
   const word = (el.getAttribute('data-word')||'');
   el.innerHTML = '';
@@ -355,7 +410,8 @@ function buildScrap(el){
     const t = document.createElement('span');
     t.className='tile';
     t.style.setProperty('--r', (Math.random()*4-2)+'deg');
-    const s = document.createElement('span'); s.textContent = ch.toUpperCase();
+    const s = document.createElement('span');
+    s.textContent = ch.toUpperCase();
     t.appendChild(s); el.appendChild(t);
   });
 }
@@ -366,38 +422,60 @@ addEventListener('hashchange', ()=>{
   if(active && !active.children.length) buildScrap(active);
 });
 
-/* Home collage: assemble + reveal hotspots */
+/* Home collage assemble + hotspots */
 addEventListener('load', ()=>{
   const p = document.getElementById('homePuzzle');
   const scene = document.getElementById('sceneHome');
-  if(p){ p.classList.add('assembled'); setTimeout(()=> scene.classList.remove('hotspots-hidden'), 900); }
+  if(p){
+    p.classList.add('assembled');
+    setTimeout(()=> scene.classList.remove('hotspots-hidden'), 900);
+  }
 });
 
-/* Hotspot zoom → page */
+/* Hotspot zoom */
 const overlay=document.getElementById('zoomOverlay');
 function zoomNavigate(fromEl,targetHash){
   const rect=fromEl.getBoundingClientRect();
   overlay.innerHTML='';
   const piece=document.createElement('div');
   piece.className='zoom-piece';
-  Object.assign(piece.style,{left:rect.left+'px',top:rect.top+'px',width:rect.width+'px',height:rect.height+'px',background:'#fff'});
-  overlay.classList.add('active'); overlay.appendChild(piece);
-  const vw=innerWidth,vh=innerHeight; const scale=Math.max(vw/rect.width,vh/rect.height)*1.05;
-  const cx=rect.left+rect.width/2, cy=rect.top+rect.height/2; const tx=vw/2-cx, ty=vh/2-cy;
+  Object.assign(piece.style,{
+    left:rect.left+'px',
+    top:rect.top+'px',
+    width:rect.width+'px',
+    height:rect.height+'px',
+    background:'#fff'
+  });
+  overlay.classList.add('active');
+  overlay.appendChild(piece);
+  const vw=innerWidth,vh=innerHeight;
+  const scale=Math.max(vw/rect.width,vh/rect.height)*1.05;
+  const cx=rect.left+rect.width/2, cy=rect.top+rect.height/2;
+  const tx=vw/2-cx, ty=vh/2-cy;
   piece.style.transition=`transform var(--zoom-ms) cubic-bezier(.2,.7,.18,1)`;
   requestAnimationFrame(()=> piece.style.transform=`translate(${tx}px,${ty}px) scale(${scale})`);
-  setTimeout(()=>{ location.hash=targetHash; overlay.classList.remove('active'); overlay.innerHTML=''; }, 560);
+  setTimeout(()=>{
+    location.hash=targetHash;
+    overlay.classList.remove('active');
+    overlay.innerHTML='';
+  },560);
 }
 document.querySelectorAll('.hotspot').forEach(h=>{
-  h.addEventListener('click', e=>{ e.preventDefault(); zoomNavigate(h, h.dataset.target); });
+  h.addEventListener('click', e=>{
+    e.preventDefault();
+    zoomNavigate(h, h.dataset.target);
+  });
 });
 
 /* Hotspot helper (press H) */
 let helperOn=false; const helper=document.getElementById('helper');
 addEventListener('keydown', e=>{
   if(e.key.toLowerCase()==='h'){
-    helperOn=!helperOn; helper.classList.toggle('active', helperOn);
-    helper.textContent = helperOn ? 'H: ON — move over collage, click to copy' : 'H: off — press H to enable';
+    helperOn=!helperOn;
+    helper.classList.toggle('active', helperOn);
+    helper.textContent = helperOn
+      ? 'H: ON — move over collage, click to copy'
+      : 'H: off — press H to enable';
   }
 });
 document.querySelectorAll('#sceneHome .puzzle').forEach(imgWrap=>{
@@ -414,11 +492,13 @@ document.querySelectorAll('#sceneHome .puzzle').forEach(imgWrap=>{
     const left=((e.clientX-r.left)/r.width*100).toFixed(2);
     const top =((e.clientY-r.top )/r.height*100).toFixed(2);
     const text=`left:${left}%; top:${top}%;`;
-    navigator.clipboard?.writeText(text); helper.textContent=`copied: ${text}`; e.preventDefault();
+    navigator.clipboard?.writeText(text);
+    helper.textContent=`copied: ${text}`;
+    e.preventDefault();
   });
 });
 
-/* Stickers: drag vs click (zoom) */
+/* Stickers, lightbox, and snap puzzles */
 (function(){
   const lb = document.getElementById('lb');
   const lbInner = document.getElementById('lbInner');
@@ -426,15 +506,45 @@ document.querySelectorAll('#sceneHome .puzzle').forEach(imgWrap=>{
   function openLB(el){
     lbInner.innerHTML='';
     const media = el.cloneNode(true);
-    if(media.tagName.toLowerCase()==='video'){ media.controls=true; media.muted=false; }
+    if(media.tagName.toLowerCase()==='video'){
+      media.controls=true; media.muted=false;
+    }
     lbInner.appendChild(media);
-    const btn=document.createElement('button'); btn.textContent='Close ✕'; btn.addEventListener('click', closeLB);
+    const btn=document.createElement('button');
+    btn.textContent='Close ✕';
+    btn.addEventListener('click', closeLB);
     lbInner.appendChild(btn);
     lb.classList.add('active');
   }
-  function closeLB(){ lb.classList.remove('active'); lbInner.innerHTML=''; }
+  function closeLB(){
+    lb.classList.remove('active');
+    lbInner.innerHTML='';
+  }
   lb.addEventListener('click', e=>{ if(e.target===lb) closeLB(); });
   document.addEventListener('keydown', e=>{ if(e.key==='Escape') closeLB(); });
+
+  /* puzzle registry */
+  const puzzles = {}; // groupId -> {pieces, solved, desk, initialized}
+
+  function registerPuzzlePiece(el){
+    const group = el.dataset.puzzleGroup;
+    if(!group) return;
+    if(!puzzles[group]){
+      puzzles[group] = {pieces:[], solved:false, desk:el.closest('.desk'), initialized:false};
+    }
+    puzzles[group].pieces.push(el);
+  }
+
+  function markGroupSolved(groupId){
+    const g = puzzles[groupId];
+    if(!g || g.solved) return;
+    g.solved = true;
+    if(!g.desk) return;
+    const msg = document.createElement('div');
+    msg.className='puzzle-message';
+    msg.textContent='INTERLOCKED!';
+    g.desk.appendChild(msg);
+  }
 
   function initDesk(desk){
     let drag=null, startX=0, startY=0, baseX=0, baseY=0, moved=false, raf=null;
@@ -445,34 +555,103 @@ document.querySelectorAll('#sceneHome .puzzle').forEach(imgWrap=>{
       el.style.transform=`translate3d(${x}px,${y}px,0)`;
     }
 
+    function maybeSnap(el){
+      const groupId = el.dataset.puzzleGroup;
+      if(!groupId) return;
+      const g = puzzles[groupId];
+      if(!g || g.solved) return;
+
+      const deskRect = g.desk.getBoundingClientRect();
+      const rect = el.getBoundingClientRect();
+      const cx = rect.left - deskRect.left + rect.width/2;
+      const cy = rect.top  - deskRect.top  + rect.height/2;
+      const targetCx = parseFloat(el.dataset.targetCx || '0');
+      const targetCy = parseFloat(el.dataset.targetCy || '0');
+      const dist = Math.hypot(cx-targetCx, cy-targetCy);
+      const threshold = 45;
+
+      if(dist < threshold){
+        const currentTx = parseFloat(el.dataset.tx || '0');
+        const currentTy = parseFloat(el.dataset.ty || '0');
+        const dx = targetCx - cx;
+        const dy = targetCy - cy;
+        const newTx = currentTx + dx;
+        const newTy = currentTy + dy;
+        setTransform(el,newTx,newTy);
+        el.dataset.tx = newTx;
+        el.dataset.ty = newTy;
+        el.dataset.locked = 'true';
+        el.classList.add('locked');
+
+        const allLocked = g.pieces.every(p=>p.dataset.locked==='true');
+        if(allLocked) markGroupSolved(groupId);
+      }
+    }
+
     desk.querySelectorAll('.sticker').forEach(box=>{
-      box.dataset.tx='0'; box.dataset.ty='0';
+      box.dataset.tx='0';
+      box.dataset.ty='0';
       const media = box.querySelector('img,video');
       if(media) media.draggable=false;
 
+      registerPuzzlePiece(box);
+
       function onDown(e){
+        if(box.dataset.locked==='true') return; // puzzle piece already locked
         drag = box; moved=false;
         startX = e.clientX; startY = e.clientY;
-        baseX = parseFloat(box.dataset.tx||'0'); baseY = parseFloat(box.dataset.ty||'0');
+        baseX = parseFloat(box.dataset.tx||'0');
+        baseY = parseFloat(box.dataset.ty||'0');
         box.setPointerCapture(e.pointerId);
         box.style.zIndex = (parseInt(box.style.zIndex||'10',10)+1).toString();
       }
       function onMove(e){
         if(!drag) return;
-        const dx = e.clientX - startX, dy = e.clientY - startY;
+        const dx = e.clientX - startX;
+        const dy = e.clientY - startY;
         if(Math.abs(dx)>4 || Math.abs(dy)>4) moved=true;
-        const nx = baseX + dx, ny = baseY + dy;
+        let nx = baseX + dx;
+        let ny = baseY + dy;
+
+        // If this sticker is in a gallery wall, keep it roughly inside
+        if(box.dataset.wall === 'gallery'){
+          const wall = box.closest('.gallery-wall');
+          if(wall){
+            const wallRect = wall.getBoundingClientRect();
+            const rect = box.getBoundingClientRect();
+            const width = rect.width;
+            const height = rect.height;
+
+            const currentRectLeft = rect.left + dx;
+            const currentRectTop  = rect.top  + dy;
+
+            // clamp
+            if(currentRectLeft < wallRect.left-4) nx = baseX + (wallRect.left-4 - rect.left);
+            if(currentRectLeft + width > wallRect.right+4) nx = baseX + (wallRect.right+4 - width - rect.left);
+            if(currentRectTop < wallRect.top-4) ny = baseY + (wallRect.top-4 - rect.top);
+            if(currentRectTop + height > wallRect.bottom+4) ny = baseY + (wallRect.bottom+4 - height - rect.top);
+          }
+        }
+
         cancelAnimationFrame(raf);
-        raf = requestAnimationFrame(()=> setTransform(drag, nx, ny));
-        drag.dataset.tx = nx; drag.dataset.ty = ny;
+        raf = requestAnimationFrame(()=> setTransform(drag,nx,ny));
+        drag.dataset.tx = nx;
+        drag.dataset.ty = ny;
       }
       function onUp(e){
         if(!drag) return;
+        const el = drag;
         drag.releasePointerCapture(e.pointerId);
         const wasClick = !moved;
-        const mediaEl = drag.querySelector('img,video');
+        const mediaEl = el.querySelector('img,video');
         drag=null;
-        if(wasClick && mediaEl){ openLB(mediaEl); }
+
+        if(!wasClick){
+          maybeSnap(el);
+        }else if(mediaEl && !el.dataset.puzzleGroup){
+          // only non-puzzle stickers open in lightbox
+          openLB(mediaEl);
+        }
       }
 
       box.addEventListener('pointerdown', onDown);
@@ -483,10 +662,49 @@ document.querySelectorAll('#sceneHome .puzzle').forEach(imgWrap=>{
   }
 
   document.querySelectorAll('.desk').forEach(initDesk);
+
+  /* record puzzle targets when page visible, then scatter */
+  function initPuzzleTargetsForVisibleGroups(){
+    Object.keys(puzzles).forEach(groupId=>{
+      const g = puzzles[groupId];
+      if(!g || g.initialized) return;
+      const page = g.desk.closest('.page');
+      if(!page || !page.classList.contains('active')) return;
+
+      const deskRect = g.desk.getBoundingClientRect();
+      if(!deskRect.width || !deskRect.height) return;
+
+      g.pieces.forEach(el=>{
+        const rect = el.getBoundingClientRect();
+        const cx = rect.left - deskRect.left + rect.width/2;
+        const cy = rect.top  - deskRect.top  + rect.height/2;
+        el.dataset.targetCx = cx;
+        el.dataset.targetCy = cy;
+
+        const offsetX = (Math.random()*2-1)*110;
+        const offsetY = (Math.random()*2-1)*80;
+        el.dataset.tx = offsetX;
+        el.dataset.ty = offsetY;
+        el.style.setProperty('--tx', offsetX+'px');
+        el.style.setProperty('--ty', offsetY+'px');
+        el.style.transform = `translate3d(${offsetX}px,${offsetY}px,0)`;
+      });
+      g.initialized = true;
+    });
+  }
+
+  window.addEventListener('load', ()=>{
+    setTimeout(initPuzzleTargetsForVisibleGroups,80);
+  });
+  window.addEventListener('hashchange', ()=>{
+    setTimeout(initPuzzleTargetsForVisibleGroups,80);
+  });
 })();
 </script>
 </body>
 </html>
+
+
 
 
 
